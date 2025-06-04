@@ -1,0 +1,63 @@
+openapi: 3.1.1
+info:
+  title: User Service API
+  description: ユーザーサービスAPI定義
+  version: 0.1.0
+
+security: []
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: ローカル開発サーバー
+paths:
+  /user:
+    get:
+      summary: ユーザー情報の取得
+      description: ユーザーの詳細情報を取得します。
+      responses:
+        "200":
+          description: ユーザー情報の取得に成功しました。
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: ユーザーID
+        "400":
+          description: リクエストが不正です。
+        "401":
+          description: 認証が必要です。
+        "404":
+          description: ユーザーが見つかりませんでした。
+    post:
+      summary: ユーザーの作成
+      description: 新しいユーザーを作成します。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ユーザー名
+                email:
+                  type: string
+                  format: email
+                  description: ユーザーメールアドレス
+      responses:
+        "200":
+          description: ユーザーの作成に成功しました。
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    description: 作成されたユーザーID
+        "400":
+          description: リクエストが不正です。

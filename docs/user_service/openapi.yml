@@ -48,6 +48,12 @@ paths:
                   type: string
                   format: email
                   description: ユーザーメールアドレス
+                password:
+                  type: string
+                  description: ユーザーパスワード
+                role:
+                  type: string
+                  description: ユーザーの権限
       responses:
         "200":
           description: ユーザーの作成に成功しました。
@@ -61,3 +67,28 @@ paths:
                     description: 作成されたユーザーID
         "400":
           description: リクエストが不正です。
+    put:
+      summary: ユーザーの更新
+      description: 既存のユーザーを更新します。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: ユーザー名
+                bio:
+                  type: string
+                  description: ユーザーの自己紹介
+        responses:
+          "200":
+            description: ユーザーの更新に成功しました。
+          "400":
+            description: リクエストが不正です。
+          "401":
+            description: 認証が必要です。
+          "404":
+            description: ユーザーが見つかりませんでした。

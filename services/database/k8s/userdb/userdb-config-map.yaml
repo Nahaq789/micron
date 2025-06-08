@@ -5,3 +5,21 @@ metadata:
 data:
   createdb.sql: |
     CREATE DATABASE IF NOT EXISTS userdb;
+    USE userdb;
+
+    CREATE TABLE IF NOT EXISTS users (
+        user_id INT PRIMARY KEY AUTO_INCREMENT,
+        uuid_user_id BINARY(16) NOT NULL,
+        email VARCHAR(50) NOT NULL UNIQUE,
+        role_id INT NOT NULL
+    );
+
+    CREATE TABLE IF NOT EXISTS user_profile (
+        user_profile_id INT PRIMARY KEY AUTO_INCREMENT,
+        user_id INT NOT NULL,
+        user_name VARCHAR(50),
+        bio TEXT,
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+    );
+
+    CREATE INDEX idx_users_email ON users(email);

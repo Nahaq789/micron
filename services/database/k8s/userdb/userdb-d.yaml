@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: userdb-d
+  labels:
+    app: userdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: userdb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: userdb
+    spec:
+      containers:
+        - name: userdb
+          image: mysql:8.0
+          ports:
+            - containerPort: 3306
+              name: mysql
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: root
+            - name: MYSQL_DATABASE
+              value: user_db
+            - name: MYSQL_USER
+              value: user
+            - name: MYSQL_PASSWORD
+              value: password
+          volumeMounts:
+            - name: userdb-init
+              mountPath: /docker-entrypoint-initdb.d
+      volumes:
+        - name: userdb-init
+          configMap:
+            name: userdb-init-config

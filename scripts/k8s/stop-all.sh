@@ -1,0 +1,1 @@
+kubectl scale deployments/userdb-d --replicas=0

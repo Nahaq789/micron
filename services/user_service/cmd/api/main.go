@@ -1,14 +1,17 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"context"
+	"log/slog"
+
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
-	router := gin.Default()
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	router.Run()
+	ctx := context.Background()
+	r := gin.Default()
+	if err := Router(ctx, r); err != nil {
+		slog.Error("failed to start router", "error", err)
+	}
+	r.Run()
 }
-

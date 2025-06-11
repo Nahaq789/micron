@@ -109,3 +109,78 @@ func TestNewUuidUserIdWithGenerator_Error(t *testing.T) {
 		}
 	})
 }
+
+func TestNewUuidUserIdFromString(t *testing.T) {
+	tests := []struct {
+		name    string
+		input   string
+		wantErr bool
+	}{
+		{
+			name:    "valid UUID v4",
+			input:   "f47ac10b-58cc-4372-a567-0e02b2c3d479",
+			wantErr: false,
+		},
+		{
+			name:    "valid UUID v7",
+			input:   "018f4230-a7b2-7001-9c8e-3f2d1a05b123",
+			wantErr: false,
+		},
+		{
+			name:    "invalid UUID format",
+			input:   "invalid-uuid-string",
+			wantErr: true,
+		},
+		{
+			name:    "empty string",
+			input:   "",
+			wantErr: true,
+		},
+		{
+			name:    "partial UUID",
+			input:   "f47ac10b-58cc-4372",
+			wantErr: true,
+		},
+		{
+			name:    "UUID with extra characters",
+			input:   "f47ac10b-58cc-4372-a567-0e02b2c3d479-extra",
+			wantErr: true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			result, err := NewUuidUserIdFromString(tt.input)
+
+			if tt.wantErr {
+				if err == nil {
+					t.Errorf("NewUuidUserIdFromString() error = nil, wantErr %v", tt.wantErr)
+				}
+				if result.value != uuid.Nil {
+					t.Errorf("NewUuidUserIdFromString() result should be empty on error")
+				}
+			} else {
+				if err != nil {
+					t.Errorf("NewUuidUserIdFromString() error = %v, wantErr %v", err, tt.wantErr)
+				}
+				if result.value == uuid.Nil {
+					t.Errorf("NewUuidUserIdFromString() result should not be empty on success")
+				}
+				if result.value.String() != tt.input {
+					t.Errorf("NewUuidUserIdFromString() result = %v, want %v", result.value.String(), tt.input)
+				}
+			}
+		})
+	}
+}
+
+func TestNewUuidUserIdFromString_ErrorMessage(t *testing.T) {
+	_, err := NewUuidUserIdFromString("invalid")
+	if err == nil {
+		t.Error("Expected error for invalid UUID")
+	}
+	expected := "UUIDのパースに失敗しました。"
+	if err.Error() != expected {
+		t.Errorf("Expected error message %q, got %q", expected, err.Error())
+	}
+}

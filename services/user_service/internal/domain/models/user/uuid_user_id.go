@@ -26,3 +26,11 @@ func NewUuidUserIdWithGenerator(generator UUIDGenerator) (UUIDUserId, error) {
 
 	return UUIDUserId{value: u}, nil
 }
+
+func NewUuidUserIdFromString(u string) (UUIDUserId, error) {
+	v, err := uuid.Parse(u)
+	if err != nil {
+		return UUIDUserId{}, errors.New("UUIDのパースに失敗しました。")
+	}
+	return UUIDUserId{value: v}, nil
+}

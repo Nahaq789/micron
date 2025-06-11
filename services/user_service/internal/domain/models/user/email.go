@@ -1,4 +1,4 @@
-package valueobjects
+package user
 
 import (
 	"errors"
@@ -18,12 +18,11 @@ func NewEmail(v string) (*Email, error) {
 }
 
 func validateEmail(value string) error {
-	emailRegex := `^[a-zA-Z0-9.!#$%&'*+/=?^_` + "`" + `{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$`
+	emailRegex := `^[a-zA-Z0-9!#$%&'*+/=?^_` + "`" + `{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_` + "`" + `{|}~-]+)*@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)+$`
 	re := regexp.MustCompile(emailRegex)
 
-	if re.MatchString(value) {
+	if !re.MatchString(value) {
 		return errors.New("メールアドレスの形式が正しくないです。")
 	}
-
 	return nil
 }

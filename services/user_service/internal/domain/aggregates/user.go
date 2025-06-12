@@ -2,6 +2,7 @@ package aggregate
 
 import (
 	"user_service/internal/domain/models/user"
+	userprofile "user_service/internal/domain/models/user_profile"
 	usertype "user_service/internal/domain/models/user_type"
 )
 
@@ -35,4 +36,9 @@ func NewUserWithDefaults(uuidUserId user.UUIDUserId, email *user.Email, userType
 		userType:    userType,
 		userProfile: userProfile,
 	}
+}
+
+func (u User) Update(userName userprofile.UserName, bio userprofile.Bio) {
+	u.userProfile.userName = userName
+	u.userProfile.bio = bio
 }

@@ -2,6 +2,7 @@ package aggregate
 
 import (
 	"user_service/internal/domain/models/user"
+	usertype "user_service/internal/domain/models/user_type"
 )
 
 type User struct {
@@ -9,11 +10,11 @@ type User struct {
 	uuidUserId  user.UUIDUserId
 	email       user.Email
 	rollId      int
-	userType    user.UserType
+	userType    usertype.UserType
 	userProfile UserProfile
 }
 
-func NewUser(userId int, uuidUserId user.UUIDUserId, email user.Email, rollId int, userType user.UserType, userProfile UserProfile) *User {
+func NewUser(userId int, uuidUserId user.UUIDUserId, email user.Email, rollId int, userType usertype.UserType, userProfile UserProfile) *User {
 	return &User{
 		userId:      userId,
 		uuidUserId:  uuidUserId,
@@ -25,7 +26,7 @@ func NewUser(userId int, uuidUserId user.UUIDUserId, email user.Email, rollId in
 }
 
 // データ登録用
-func NewUserWithDefaults(uuidUserId user.UUIDUserId, email user.Email, rollId int, userType user.UserType, userProfile UserProfile) *User {
+func NewUserWithDefaults(uuidUserId user.UUIDUserId, email user.Email, rollId int, userType usertype.UserType, userProfile UserProfile) *User {
 	return &User{
 		userId:      0,
 		uuidUserId:  uuidUserId,

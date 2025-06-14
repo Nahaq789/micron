@@ -4,7 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"os"
-	"user_service/internal/logger"
+	"user_service/internal/shared/infrastructure/logger"
 
 	"github.com/gin-gonic/gin"
 )

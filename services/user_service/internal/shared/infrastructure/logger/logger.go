@@ -3,7 +3,6 @@ package logger
 import (
 	"context"
 	"log/slog"
-	"user_service/internal/shared/infrastructure/tracing"
 	"user_service/internal/shared/infrastructure/tracing/keys"
 )
 
@@ -18,17 +17,11 @@ func NewContextHandler(handler slog.Handler) *ContextHandler {
 func (h *ContextHandler) Handle(ctx context.Context, record slog.Record) error {
 	var attrs []slog.Attr
 
-	cloudContextKey, err := tracing.GetTraceIdFromCtx(ctx, keys.NewCloudContextKey())
-	if err != nil {
-		return err
-	}
-	contextKey, err := tracing.GetTraceIdFromCtx(ctx, keys.NewContextKey())
-	if err != nil {
-		return err
-	}
+	cloudContextKey := keys.NewCloudContextTraceID("")
+	contextKey := keys.NewCloudContextTraceID("")
 
-	attrs = append(attrs, slog.String(cloudContextKey.GetKey(), cloudContextKey.GetTraceID()))
-	attrs = append(attrs, slog.String(contextKey.GetKey(), contextKey.GetTraceID()))
+	attrs = append(attrs, slog.String(cloudContextKey.GetKey(), cloudContextKey.GetValue()))
+	attrs = append(attrs, slog.String(contextKey.GetKey(), contextKey.GetValue()))
 
 	if len(attrs) > 0 {
 		record.AddAttrs(attrs...)

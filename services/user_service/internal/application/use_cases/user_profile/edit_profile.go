@@ -9,6 +9,7 @@ import (
 )
 
 type EditProfile struct {
+	logger     slog.Logger
 	repository repositories.UserRepository
 }
 
@@ -24,7 +25,7 @@ func (e EditProfile) EditUserProfile(ctx context.Context, command commands.EditP
 
 	userName, err := userprofile.NewUserName(command.GetUserName())
 	if err != nil {
-		slog.ErrorContext(ctx, "ユーザ名が不正です。", "error", err)
+		e.logger.ErrorContext(ctx, "ユーザ名が不正です。", "error", err)
 	}
 	bio := userprofile.NewBio(command.GetBio())
 
@@ -32,7 +33,7 @@ func (e EditProfile) EditUserProfile(ctx context.Context, command commands.EditP
 
 	err = e.repository.Update(user)
 	if err != nil {
-		slog.ErrorContext(ctx, "ユーザの更新に失敗しました。", "error", err)
+		e.logger.ErrorContext(ctx, "ユーザの更新に失敗しました。", "error", err)
 	}
 
 	return nil

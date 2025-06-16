@@ -20,8 +20,12 @@ func (h *ContextHandler) Handle(ctx context.Context, record slog.Record) error {
 	cloudTrace := keys.NewCloudContextTrace()
 	trace := keys.NewContextTrace()
 
-	attrs = append(attrs, slog.String(cloudTrace.GetKey(), cloudTrace.GetValueFromCtx(ctx)))
-	attrs = append(attrs, slog.String(trace.GetKey(), trace.GetValueFromCtx(ctx)))
+	if id := cloudTrace.GetValueFromCtx(ctx); id != "" {
+		attrs = append(attrs, slog.String(cloudTrace.GetKey(), id))
+	}
+	if id := trace.GetValueFromCtx(ctx); id != "" {
+		attrs = append(attrs, slog.String(trace.GetKey(), id))
+	}
 
 	if len(attrs) > 0 {
 		record.AddAttrs(attrs...)

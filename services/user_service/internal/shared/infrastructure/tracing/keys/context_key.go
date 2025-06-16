@@ -1,31 +1,35 @@
 package keys
 
+import (
+	"context"
+
+	"github.com/google/uuid"
+)
+
 type ContextKey string
 
 const (
-	ContextTraceKey ContextKey = "traceID"
+	contextTraceKey ContextKey = "traceID"
 )
 
-func (c ContextKey) GetContextKey() string {
-	return string(ContextTraceKey)
+type ContextTrace struct {
+	key ContextKey
 }
 
-type ContextTraceID struct {
-	key   ContextKey
-	value string
+func NewContextTrace() ContextTrace {
+	return ContextTrace{key: contextTraceKey}
 }
 
-func (c ContextTraceID) GetKey() string {
+func (c ContextTrace) GetKey() string {
 	return string(c.key)
 }
 
-func (c ContextTraceID) GetValue() string {
-	return c.value
+func (c ContextTrace) GetValueFromCtx(ctx context.Context) string {
+	id := ctx.Value(c.key).(string)
+	return id
 }
 
-func NewContextTraceID(v string) ContextTraceID {
-	return ContextTraceID{
-		key:   ContextTraceKey,
-		value: v,
-	}
+func (c ContextTrace) GenerateID() string {
+	id := uuid.New().String()
+	return id
 }

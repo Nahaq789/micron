@@ -25,8 +25,10 @@ func (c CloudContextTrace) GetKey() string {
 }
 
 func (c CloudContextTrace) GetValueFromCtx(ctx context.Context) string {
-	id := ctx.Value(c.key).(string)
-	return id
+	if id, ok := ctx.Value(c.key).(string); ok && id != "" {
+		return id
+	}
+	return ""
 }
 
 func (c CloudContextTrace) GenerateID() string {

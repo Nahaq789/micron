@@ -1,8 +1,8 @@
 package main
 
 import (
-	"context"
 	"log/slog"
+	"net/http"
 	"os"
 	"user_service/internal/shared/infrastructure/logger"
 
@@ -10,8 +10,6 @@ import (
 )
 
 func main() {
-	ctx := context.Background()
-
 	handler := slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{
 		Level: slog.LevelInfo,
 	})
@@ -20,8 +18,8 @@ func main() {
 	slog.SetDefault(logger)
 
 	r := gin.Default()
-	if err := Router(ctx, r); err != nil {
+	if err := Router(r); err != nil {
 		slog.Error("failed to start router", "error", err)
 	}
-	r.Run()
+	http.ListenAndServe(":8080", r)
 }

@@ -17,11 +17,11 @@ func NewContextHandler(handler slog.Handler) *ContextHandler {
 func (h *ContextHandler) Handle(ctx context.Context, record slog.Record) error {
 	var attrs []slog.Attr
 
-	cloudContextKey := keys.NewCloudContextTraceID("")
-	contextKey := keys.NewCloudContextTraceID("")
+	cloudTrace := keys.NewCloudContextTrace()
+	trace := keys.NewContextTrace()
 
-	attrs = append(attrs, slog.String(cloudContextKey.GetKey(), cloudContextKey.GetValue()))
-	attrs = append(attrs, slog.String(contextKey.GetKey(), contextKey.GetValue()))
+	attrs = append(attrs, slog.String(cloudTrace.GetKey(), cloudTrace.GetValueFromCtx(ctx)))
+	attrs = append(attrs, slog.String(trace.GetKey(), trace.GetValueFromCtx(ctx)))
 
 	if len(attrs) > 0 {
 		record.AddAttrs(attrs...)

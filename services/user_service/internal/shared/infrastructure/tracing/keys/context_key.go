@@ -25,7 +25,7 @@ func (c ContextTrace) GetKey() string {
 }
 
 func (c ContextTrace) GetValueFromCtx(ctx context.Context) string {
-	if id, ok := ctx.Value(c.key).(string); ok && id != "" {
+	if id, ok := ctx.Value(string(c.key)).(string); ok && id != "" {
 		return id
 	}
 	return ""

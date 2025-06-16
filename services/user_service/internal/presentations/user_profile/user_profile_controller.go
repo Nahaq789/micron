@@ -18,7 +18,7 @@ type EditUserProfileController struct {
 func (e EditUserProfileController) EditUserProfile(c *gin.Context) {
 	var command commands.EditProfileCommand
 	if err := c.ShouldBind(&command); err != nil {
-		e.logger.ErrorContext(c, "ユーザプロフィール更新リクエストの値が不正です。", "error", err)
+		e.logger.ErrorContext(c.Request.Context(), "ユーザプロフィール更新リクエストの値が不正です。", "error", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status": http.StatusBadRequest,
 			"error":  err.Error(),
@@ -28,7 +28,7 @@ func (e EditUserProfileController) EditUserProfile(c *gin.Context) {
 
 	ctx := context.Background()
 	if err := e.service.EditUserProfile(ctx, command); err != nil {
-		e.logger.ErrorContext(c, "ユーザプロフィールの更新に失敗しました。", "error", err)
+		e.logger.ErrorContext(c.Request.Context(), "ユーザプロフィールの更新に失敗しました。", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": http.StatusInternalServerError,
 			"error":  err.Error(),

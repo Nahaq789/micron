@@ -16,9 +16,17 @@ type User struct {
 	userProfile UserProfile
 }
 
-func (u User) Update(userName userprofile.UserName, bio userprofile.Bio) {
-	u.userProfile.userName = userName
-	u.userProfile.bio = bio
+func (u User) UpdateUserProfile(user *User, userName userprofile.UserName, bio userprofile.Bio) *User {
+	newProfile := NewUserProfile(user.userProfile.userId, user.userId, userName, bio)
+
+	return &User{
+		userId:      user.userId,
+		uuidUserId:  user.uuidUserId,
+		email:       user.email,
+		role:        user.role,
+		userType:    user.userType,
+		userProfile: newProfile,
+	}
 }
 
 func RegisterAdminUser(email *user.Email, userName userprofile.UserName, bio userprofile.Bio) (*User, error) {

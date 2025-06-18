@@ -17,9 +17,10 @@ func NewEditProfile(r repositories.UserRepository) EditProfile {
 	return EditProfile{repository: r}
 }
 
-func (e EditProfile) EditUserProfile(ctx context.Context, command commands.EditProfileCommand) error {
+func (e *EditProfile) EditUserProfile(ctx context.Context, command commands.EditProfileCommand) error {
 	user, err := e.repository.GetById(command.GetUserId())
 	if err != nil {
+		e.logger.ErrorContext(ctx, "ユーザ情報取得に失敗しました。", "error", err)
 		return err
 	}
 
@@ -29,9 +30,9 @@ func (e EditProfile) EditUserProfile(ctx context.Context, command commands.EditP
 	}
 	bio := userprofile.NewBio(command.GetBio())
 
-	user.Update(userName, bio)
+	new := user.UpdateUserProfile(user, userName, bio)
 
-	err = e.repository.Update(user)
+	err = e.repository.Update(new)
 	if err != nil {
 		e.logger.ErrorContext(ctx, "ユーザの更新に失敗しました。", "error", err)
 	}

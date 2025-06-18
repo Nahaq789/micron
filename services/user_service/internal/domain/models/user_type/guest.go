@@ -9,6 +9,6 @@ func NewGuest() Guest {
 	return Guest{id: 2, name: "Guest"}
 }
 
-func (g Guest) DecideRole() int {
-	return 1
+func (g Guest) GetTypeName() string {
+	return g.name
 }

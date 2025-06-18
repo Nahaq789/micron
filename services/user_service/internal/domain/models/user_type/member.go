@@ -1,15 +1,14 @@
 package usertype
 
 type Member struct {
-	id     int
-	name   string
-	roleId int
+	id   int
+	name string
 }
 
-func NewMember(roleId int) Member {
-	return Member{id: 1, name: "Member", roleId: roleId}
+func NewMember() Member {
+	return Member{id: 1, name: "Member"}
 }
 
-func (m Member) DecideRole() int {
-	return m.roleId
+func (m Member) GetTypeName() string {
+	return m.name
 }

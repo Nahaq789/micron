@@ -8,22 +8,29 @@ import (
 	"user_service/internal/domain/models/user"
 	userprofile "user_service/internal/domain/models/user_profile"
 	"user_service/internal/domain/repositories"
+	"user_service/internal/domain/services"
 )
 
 type RegisterAdminUser struct {
 	logger     slog.Logger
+	checker    services.EmailDuplicateChekcker
 	repository repositories.UserRepository
 }
 
-func NewCreateUser(l slog.Logger, r repositories.UserRepository) RegisterAdminUser {
-	return RegisterAdminUser{logger: l, repository: r}
+func NewCreateUser(l slog.Logger, c services.EmailDuplicateChekcker, r repositories.UserRepository) *RegisterAdminUser {
+	return &RegisterAdminUser{logger: l, checker: c, repository: r}
 }
 
-func (r RegisterAdminUser) RegisterAdmin(ctx context.Context, c commands.RegisterAdminUserCommand) error {
+func (r *RegisterAdminUser) RegisterAdmin(ctx context.Context, c commands.RegisterAdminUserCommand) error {
 	email, err := user.NewEmail(c.GetEmail())
 	if err != nil {
 		r.logger.ErrorContext(ctx, "メールアドレスが不正です。", "error", err)
 		return err
+	}
+
+	if exists := r.checker.CheckDuplicate(email); exists != nil {
+		r.logger.ErrorContext(ctx, "メールアドレス重複チェックでエラーが発生しました。", "error", exists)
+		return exists
 	}
 
 	userName, err := userprofile.NewUserName(c.GetUserName())

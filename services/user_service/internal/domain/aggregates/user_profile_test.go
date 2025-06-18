@@ -80,37 +80,31 @@ func TestNewUserProfile(t *testing.T) {
 func TestNewUserProfileWithDefaults(t *testing.T) {
 	tests := []struct {
 		name          string
-		userId        int
 		userNameValue string
 		bioValue      string
 	}{
 		{
 			name:          "valid user profile with defaults",
-			userId:        100,
 			userNameValue: "testuser",
 			bioValue:      "I am a test user",
 		},
 		{
 			name:          "user profile with empty bio",
-			userId:        200,
 			userNameValue: "user2",
 			bioValue:      "",
 		},
 		{
 			name:          "user profile with long bio",
-			userId:        300,
 			userNameValue: "longbiouser",
 			bioValue:      "This is a very long bio that contains detailed information about the user",
 		},
 		{
 			name:          "user profile with zero user id",
-			userId:        0,
 			userNameValue: "zerouser",
 			bioValue:      "Zero ID user",
 		},
 		{
 			name:          "user profile with negative user id",
-			userId:        -5,
 			userNameValue: "negativeuser",
 			bioValue:      "Negative ID user",
 		},
@@ -125,13 +119,10 @@ func TestNewUserProfileWithDefaults(t *testing.T) {
 
 			bio := userprofile.NewBio(tt.bioValue)
 
-			result := NewUserProfileWithDefaults(tt.userId, userName, bio)
+			result := NewUserProfileWithDefaults(userName, bio)
 
 			if result.userProfileId != 0 {
 				t.Errorf("NewUserProfileWithDefaults() userProfileId = %v, want 0", result.userProfileId)
-			}
-			if result.userId != tt.userId {
-				t.Errorf("NewUserProfileWithDefaults() userId = %v, want %v", result.userId, tt.userId)
 			}
 			if result.userName != userName {
 				t.Errorf("NewUserProfileWithDefaults() userName = %v, want %v", result.userName, userName)

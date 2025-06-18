@@ -19,10 +19,10 @@ func NewUserProfile(userProfileId int, userId int, userName userprofile.UserName
 }
 
 // データ登録用
-func NewUserProfileWithDefaults(userId int, userName userprofile.UserName, bio userprofile.Bio) UserProfile {
+func NewUserProfileWithDefaults(userName userprofile.UserName, bio userprofile.Bio) UserProfile {
 	return UserProfile{
 		userProfileId: 0,
-		userId:        userId,
+		userId:        0,
 		userName:      userName,
 		bio:           bio,
 	}

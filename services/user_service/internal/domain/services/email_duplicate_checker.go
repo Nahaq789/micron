@@ -6,19 +6,19 @@ import (
 	"user_service/internal/domain/repositories"
 )
 
-type EmailDuplicateChekcker interface {
+type EmailDuplicateChecker interface {
 	CheckDuplicate(email *user.Email) error
 }
 
-type emailDupulicateService struct {
+type emailDuplicateService struct {
 	repository repositories.UserRepository
 }
 
-func NewEmailDuplicateService(r repositories.UserRepository) EmailDuplicateChekcker {
-	return &emailDupulicateService{repository: r}
+func NewEmailDuplicateService(r repositories.UserRepository) EmailDuplicateChecker {
+	return &emailDuplicateService{repository: r}
 }
 
-func (s *emailDupulicateService) CheckDuplicate(email *user.Email) error {
+func (s *emailDuplicateService) CheckDuplicate(email *user.Email) error {
 	exist, err := s.repository.ExistsWithEmail(email)
 	if err != nil {
 		return err

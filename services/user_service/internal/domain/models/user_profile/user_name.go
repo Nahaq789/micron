@@ -20,3 +20,7 @@ func validateUserName(v string) error {
 	}
 	return nil
 }
+
+func (u UserName) GetValue() string {
+	return u.value
+}

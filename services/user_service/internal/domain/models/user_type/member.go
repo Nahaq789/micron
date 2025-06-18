@@ -12,3 +12,7 @@ func NewMember() Member {
 func (m Member) GetTypeName() string {
 	return m.name
 }
+
+func (m Member) GetTypeId() int {
+	return m.id
+}

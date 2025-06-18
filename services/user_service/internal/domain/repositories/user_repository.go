@@ -6,7 +6,7 @@ import (
 )
 
 type UserRepository interface {
-	GetById(userId int) (*aggregate.User, error)
+	GetById(userId user.UserId) (*aggregate.User, error)
 	Register(user *aggregate.User) error
 	Update(user *aggregate.User) error
 	ExistsWithEmail(email *user.Email) (bool, error)

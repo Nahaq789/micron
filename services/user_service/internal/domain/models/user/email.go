@@ -26,3 +26,7 @@ func validateEmail(value string) error {
 	}
 	return nil
 }
+
+func (e *Email) GetValue() string {
+	return e.value
+}

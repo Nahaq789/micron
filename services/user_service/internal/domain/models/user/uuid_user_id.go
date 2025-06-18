@@ -34,3 +34,7 @@ func NewUuidUserIdFromString(u string) (UUIDUserId, error) {
 	}
 	return UUIDUserId{value: v}, nil
 }
+
+func (u UUIDUserId) GetValue() string {
+	return u.value.String()
+}

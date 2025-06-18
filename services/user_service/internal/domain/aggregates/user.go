@@ -8,7 +8,7 @@ import (
 )
 
 type User struct {
-	userId      int
+	userId      user.UserId
 	uuidUserId  user.UUIDUserId
 	email       *user.Email
 	role        role.Role
@@ -17,7 +17,7 @@ type User struct {
 }
 
 func (u User) UpdateUserProfile(user *User, userName userprofile.UserName, bio userprofile.Bio) *User {
-	newProfile := NewUserProfile(user.userProfile.userId, user.userId, userName, bio)
+	newProfile := NewUserProfile(user.userProfile.userProfileId, user.userId, userName, bio)
 
 	return &User{
 		userId:      user.userId,
@@ -41,7 +41,7 @@ func RegisterAdminUser(email *user.Email, userName userprofile.UserName, bio use
 	}
 
 	user := &User{
-		userId:      0,
+		userId:      user.Init(),
 		uuidUserId:  uuid,
 		email:       email,
 		role:        admin,
@@ -50,4 +50,23 @@ func RegisterAdminUser(email *user.Email, userName userprofile.UserName, bio use
 	}
 
 	return user, nil
+}
+
+func (u User) GetUserId() user.UserId {
+	return u.userId
+}
+func (u User) GetUuidUserId() user.UUIDUserId {
+	return u.uuidUserId
+}
+func (u User) GetEmail() *user.Email {
+	return u.email
+}
+func (u User) GetRole() role.Role {
+	return u.role
+}
+func (u User) GetUserType() usertype.UserType {
+	return u.userType
+}
+func (u User) GetUserProfile() UserProfile {
+	return u.userProfile
 }

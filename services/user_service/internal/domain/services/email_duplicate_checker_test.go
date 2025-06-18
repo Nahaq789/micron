@@ -18,9 +18,9 @@ func (m *mockUserRepository) ExistsWithEmail(email *user.Email) (bool, error) {
 	return m.existsWithEmailFunc(email)
 }
 
-func (m *mockUserRepository) GetById(userId int) (*aggregate.User, error) { return nil, nil }
-func (m *mockUserRepository) Register(user *aggregate.User) error         { return nil }
-func (m *mockUserRepository) Update(user *aggregate.User) error           { return nil }
+func (m *mockUserRepository) GetById(userId user.UserId) (*aggregate.User, error) { return nil, nil }
+func (m *mockUserRepository) Register(user *aggregate.User) error                 { return nil }
+func (m *mockUserRepository) Update(user *aggregate.User) error                   { return nil }
 
 func TestEmailDuplicateService_CheckDuplicate(t *testing.T) {
 	tests := []struct {

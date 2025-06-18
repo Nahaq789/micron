@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"user_service/internal/application/commands"
+	"user_service/internal/domain/models/user"
 	userprofile "user_service/internal/domain/models/user_profile"
 	"user_service/internal/domain/repositories"
 )
@@ -18,7 +19,8 @@ func NewEditProfile(r repositories.UserRepository) EditProfile {
 }
 
 func (e *EditProfile) EditUserProfile(ctx context.Context, command commands.EditProfileCommand) error {
-	user, err := e.repository.GetById(command.GetUserId())
+	userId := user.NewUserId(command.GetUserId())
+	user, err := e.repository.GetById(userId)
 	if err != nil {
 		e.logger.ErrorContext(ctx, "ユーザ情報取得に失敗しました。", "error", err)
 		return err

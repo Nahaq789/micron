@@ -2,6 +2,7 @@ package aggregate
 
 import (
 	"testing"
+	"user_service/internal/domain/models/user"
 	userprofile "user_service/internal/domain/models/user_profile"
 )
 
@@ -59,12 +60,13 @@ func TestNewUserProfile(t *testing.T) {
 
 			bio := userprofile.NewBio(tt.bioValue)
 
-			result := NewUserProfile(tt.userProfileId, tt.userId, userName, bio)
+			userId := user.NewUserId(tt.userId)
+			result := NewUserProfile(tt.userProfileId, userId, userName, bio)
 
 			if result.userProfileId != tt.userProfileId {
 				t.Errorf("NewUserProfile() userProfileId = %v, want %v", result.userProfileId, tt.userProfileId)
 			}
-			if result.userId != tt.userId {
+			if result.userId != userId {
 				t.Errorf("NewUserProfile() userId = %v, want %v", result.userId, tt.userId)
 			}
 			if result.userName != userName {

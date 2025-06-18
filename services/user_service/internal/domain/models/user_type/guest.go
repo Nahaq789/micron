@@ -12,3 +12,7 @@ func NewGuest() Guest {
 func (g Guest) GetTypeName() string {
 	return g.name
 }
+
+func (g Guest) GetTypeId() int {
+	return g.id
+}

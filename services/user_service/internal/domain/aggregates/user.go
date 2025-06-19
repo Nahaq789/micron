@@ -8,12 +8,13 @@ import (
 )
 
 type User struct {
-	userId      user.UserId
-	uuidUserId  user.UUIDUserId
-	email       *user.Email
-	role        role.Role
-	userType    usertype.UserType
-	userProfile UserProfile
+	userId       user.UserId
+	uuidUserId   user.UUIDUserId
+	email        *user.Email
+	role         role.Role
+	userType     usertype.UserType
+	userProfile  UserProfile
+	organization Organization
 }
 
 func (u User) UpdateUserProfile(user *User, userName userprofile.UserName, bio userprofile.Bio) *User {

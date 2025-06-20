@@ -1,6 +1,7 @@
 package aggregate
 
 import (
+	"user_service/internal/domain/models/organization"
 	"user_service/internal/domain/models/role"
 	"user_service/internal/domain/models/user"
 	userprofile "user_service/internal/domain/models/user_profile"
@@ -8,13 +9,13 @@ import (
 )
 
 type User struct {
-	userId       user.UserId
-	uuidUserId   user.UUIDUserId
-	email        *user.Email
-	role         role.Role
-	userType     usertype.UserType
-	userProfile  UserProfile
-	organization Organization
+	userId          user.UserId
+	uuidUserId      user.UUIDUserId
+	email           *user.Email
+	role            role.Role
+	userType        usertype.UserType
+	userProfile     UserProfile
+	organization_id organization.OrganizationId
 }
 
 func (u User) UpdateUserProfile(user *User, userName userprofile.UserName, bio userprofile.Bio) *User {
@@ -30,7 +31,10 @@ func (u User) UpdateUserProfile(user *User, userName userprofile.UserName, bio u
 	}
 }
 
-func RegisterAdminUser(email *user.Email, userName userprofile.UserName, bio userprofile.Bio) (*User, error) {
+func RegisterAdminUser(email *user.Email,
+	userName userprofile.UserName,
+	bio userprofile.Bio,
+	organizationId organization.OrganizationId) (*User, error) {
 	userProfile := NewUserProfileWithDefaults(userName, bio)
 
 	admin := role.DetermineAdminRole()
@@ -42,12 +46,13 @@ func RegisterAdminUser(email *user.Email, userName userprofile.UserName, bio use
 	}
 
 	user := &User{
-		userId:      user.Init(),
-		uuidUserId:  uuid,
-		email:       email,
-		role:        admin,
-		userType:    member,
-		userProfile: userProfile,
+		userId:          user.Init(),
+		uuidUserId:      uuid,
+		email:           email,
+		role:            admin,
+		userType:        member,
+		userProfile:     userProfile,
+		organization_id: organizationId,
 	}
 
 	return user, nil

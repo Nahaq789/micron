@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package user_service;
+
+option go_package = "./proto";
+
+service UserService {
+        rpc CreateAdminUser(CreateAdminUserRequest) returns (CreateAdminUserResponse);
+}
+
+message CreateAdminUserRequest {
+        string username = 1;
+        string email = 2;
+        string bio = 3;
+        string organizationId = 4;
+}
+
+message CreateAdminUserResponse {
+        string message = 1;
+}

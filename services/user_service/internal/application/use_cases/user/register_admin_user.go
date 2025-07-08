@@ -5,6 +5,7 @@ import (
 	"log/slog"
 	"user_service/internal/application/commands"
 	aggregate "user_service/internal/domain/aggregates"
+	"user_service/internal/domain/models/organization"
 	"user_service/internal/domain/models/user"
 	userprofile "user_service/internal/domain/models/user_profile"
 	"user_service/internal/domain/repositories"
@@ -40,8 +41,9 @@ func (r *RegisterAdminUser) RegisterAdmin(ctx context.Context, c commands.Regist
 	}
 
 	bio := userprofile.NewBio(c.GetBio())
+	organizationId, err := organization.FromOrganizationId(c.GetOrganizationId())
 
-	user, err := aggregate.RegisterAdminUser(email, userName, bio)
+	user, err := aggregate.RegisterAdminUser(email, userName, bio, organizationId)
 	if err != nil {
 		r.logger.ErrorContext(ctx, "管理者ユーザの作成に失敗しました。", "error", err)
 		return err

@@ -116,7 +116,7 @@ func TestNewEmailDuplicateService(t *testing.T) {
 	}
 
 	// 正しい型が返されることを確認
-	concreteService, ok := service.(*emailDuplicateService)
+	concreteService, ok := service.(*EmailDuplicateService)
 	if !ok {
 		t.Error("NewEmailDuplicateServiceは*emailDuplicateService型を返すべきです")
 		return
@@ -153,7 +153,7 @@ func TestEmailDuplicateService_CheckDuplicate_NilEmail(t *testing.T) {
 
 func TestEmailDuplicateService_InterfaceImplementation(t *testing.T) {
 	// インターフェースが正しく実装されていることを確認
-	var _ EmailDuplicateChecker = (*emailDuplicateService)(nil)
+	var _ EmailDuplicateChecker = (*EmailDuplicateService)(nil)
 
 	mockRepo := &mockUserRepository{}
 	service := NewEmailDuplicateService(mockRepo)

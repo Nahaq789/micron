@@ -18,7 +18,7 @@ type RegisterAdminUser struct {
 	repository repositories.UserRepository
 }
 
-func NewCreateUser(l slog.Logger, c services.EmailDuplicateChecker, r repositories.UserRepository) *RegisterAdminUser {
+func NewRegisterAdminUser(l slog.Logger, c services.EmailDuplicateChecker, r repositories.UserRepository) *RegisterAdminUser {
 	return &RegisterAdminUser{logger: l, checker: c, repository: r}
 }
 
@@ -45,7 +45,7 @@ func (r *RegisterAdminUser) RegisterAdmin(ctx context.Context, c commands.Regist
 
 	user, err := aggregate.RegisterAdminUser(email, userName, bio, organizationId)
 	if err != nil {
-		r.logger.ErrorContext(ctx, "管理者ユーザの作成に失敗しました。", "error", err)
+		r.logger.ErrorContext(ctx, "管理者ユーザの生成に失敗しました。", "error", err)
 		return err
 	}
 

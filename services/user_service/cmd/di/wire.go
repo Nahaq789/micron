@@ -27,7 +27,7 @@ var userRepositorySet = wire.NewSet(
 	wire.Bind(new(repositories.UserRepository), new(*infrastructure.UserRepositoryImpl)),
 )
 
-var emailDuplicateChecker = wire.NewSet(
+var emailDuplicateCheckerSet = wire.NewSet(
 	services.NewEmailDuplicateService,
 	wire.Bind(new(services.EmailDuplicateChecker), new(*services.EmailDuplicateService)),
 )
@@ -37,4 +37,13 @@ var controllerSet = wire.NewSet(usercontroller.NewUserController)
 type ControllerSet struct {
 	UserController            *usercontroller.UserController
 	EditUserProfileController *userprofile.EditUserProfileController
+}
+
+func Initialize(logger *slog.Logger, db *sql.DB) *ControllerSet {
+	wire.Build(
+		userRepositorySet,
+		emailDuplicateCheckerSet,
+		wire.Struct(new(ControllerSet), "*"),
+	)
+	return nil
 }

@@ -6,6 +6,8 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"user_service/cmd/di"
+	"user_service/internal/shared/infrastructure/database"
 	"user_service/internal/shared/infrastructure/logger"
 	"user_service/proto"
 
@@ -21,13 +23,16 @@ func main() {
 	logger := slog.New(contextHandler)
 	slog.SetDefault(logger)
 
+	db := database.InitDB()
+	cr := di.Initialize(logger, db)
+
 	go func() {
 		listen, err := net.Listen("tcp", "localhost:50051")
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
 		}
 		s := grpc.NewServer()
-		proto.RegisterUserServiceServer(s)
+		proto.RegisterUserServiceServer(s, cr.UserController)
 		logger.Info("Server is running on :50051")
 		if err := s.Serve(listen); err != nil {
 			log.Fatalf("failed to serve: %v", err)

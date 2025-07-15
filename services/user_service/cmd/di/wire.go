@@ -12,11 +12,6 @@ import (
 	"github.com/google/wire"
 )
 
-// var registerAdminUserSet = wire.NewSet(
-// 	user.NewRegisterAdminUser,
-// 	wire.Bind(new(user.RegisterAdminUser), new())
-// )
-
 func ProviderUserRepository(logger *slog.Logger, db *sql.DB) *infrastructure.UserRepositoryImpl {
 	repository := infrastructure.NewUserRepositoryImpl(logger, db)
 	return repository

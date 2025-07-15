@@ -23,7 +23,10 @@ func main() {
 	logger := slog.New(contextHandler)
 	slog.SetDefault(logger)
 
-	db := database.InitDB()
+	db, err := database.InitDB()
+	if err != nil {
+		log.Fatalf("failed init db: %v\n", err)
+	}
 	cr := di.Initialize(logger, db)
 
 	go func() {

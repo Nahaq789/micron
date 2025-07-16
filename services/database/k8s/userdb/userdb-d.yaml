@@ -34,7 +34,12 @@ spec:
           volumeMounts:
             - name: userdb-init
               mountPath: /docker-entrypoint-initdb.d
+            - name: userdb-persistent-storage
+              mountPath: /var/lib/mysql
       volumes:
         - name: userdb-init
           configMap:
             name: userdb-init-config
+        - name: userdb-persistent-storage
+          persistentVolumeClaim:
+            claimName: userdb-v-claim

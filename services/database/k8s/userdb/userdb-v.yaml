@@ -10,16 +10,14 @@ spec:
   capacity:
     storage: 1Gi
   hostPath:
-    path: "/mnt/data"
+    path: "/tmp/userdb-data"
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: longhorn
 
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
   name: userdb-v-claim
 spec:
-  storageClassName: longhorn
   accessModes:
     - ReadWriteOnce
   resources:

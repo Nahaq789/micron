@@ -6,7 +6,6 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"user_service/cmd/di"
 	"user_service/internal/shared/infrastructure/database"
 	"user_service/internal/shared/infrastructure/logger"
 	"user_service/proto"

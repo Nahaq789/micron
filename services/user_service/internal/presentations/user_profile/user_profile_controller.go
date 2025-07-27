@@ -10,12 +10,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type EditUserProfileController struct {
-	logger  slog.Logger
-	service userprofile.EditProfile
+type UserProfileController struct {
+	logger      slog.Logger
+	editService userprofile.EditProfile
 }
 
-func (e EditUserProfileController) EditUserProfile(c *gin.Context) {
+func NewUserProfileController(l slog.Logger, editService userprofile.EditProfile) *UserProfileController {
+	return &UserProfileController{
+		logger:      l,
+		editService: editService,
+	}
+}
+
+func (e UserProfileController) EditUserProfile(c *gin.Context) {
 	var command commands.EditProfileCommand
 	if err := c.ShouldBind(&command); err != nil {
 		e.logger.ErrorContext(c.Request.Context(), "ユーザプロフィール更新リクエストの値が不正です。", "error", err)
@@ -27,7 +34,7 @@ func (e EditUserProfileController) EditUserProfile(c *gin.Context) {
 	}
 
 	ctx := context.Background()
-	if err := e.service.EditUserProfile(ctx, command); err != nil {
+	if err := e.editService.EditUserProfile(ctx, command); err != nil {
 		e.logger.ErrorContext(c.Request.Context(), "ユーザプロフィールの更新に失敗しました。", "error", err)
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"status": http.StatusInternalServerError,

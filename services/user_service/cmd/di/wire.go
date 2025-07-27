@@ -1,6 +1,3 @@
-//go:build wireinject
-// +build wireinject
-
 package di
 
 import (
@@ -29,7 +26,8 @@ var emailDuplicateCheckerSet = wire.NewSet(
 	services.NewEmailDuplicateService,
 )
 
-var controllerSet = wire.NewSet(usercontroller.NewUserController)
+var userControllerSet = wire.NewSet(usercontroller.NewUserController)
+var userProfileControllerSet = wire.NewSet(userprofile.NewUserProfileController)
 
 type ControllerSet struct {
 	UserController            *usercontroller.UserController

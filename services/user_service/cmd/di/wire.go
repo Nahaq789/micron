@@ -1,3 +1,6 @@
+//go:build wireinject
+// +build wireinject
+
 package di
 
 import (
@@ -38,7 +41,10 @@ func Initialize(logger *slog.Logger, db *sql.DB) *ControllerSet {
 	wire.Build(
 		userRepositorySet,
 		emailDuplicateCheckerSet,
+		userControllerSet,
+		userProfileControllerSet,
 		wire.Struct(new(ControllerSet), "*"),
 	)
 	return nil
 }
+

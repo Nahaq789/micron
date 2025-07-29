@@ -10,12 +10,14 @@ import (
 )
 
 type EditProfile struct {
-	logger     slog.Logger
+	logger     *slog.Logger
 	repository repositories.UserRepository
 }
 
-func NewEditProfile(r repositories.UserRepository) EditProfile {
-	return EditProfile{repository: r}
+func NewEditProfile(l *slog.Logger, r repositories.UserRepository) *EditProfile {
+	return &EditProfile{
+		logger:     l,
+		repository: r}
 }
 
 func (e *EditProfile) EditUserProfile(ctx context.Context, command commands.EditProfileCommand) error {

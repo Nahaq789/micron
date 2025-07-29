@@ -7,6 +7,7 @@ import (
 	"database/sql"
 	"log/slog"
 	"user_service/internal/application/use_cases/user"
+	upusecase "user_service/internal/application/use_cases/user_profile"
 	"user_service/internal/domain/repositories"
 	"user_service/internal/domain/services"
 	"user_service/internal/infrastructure"
@@ -29,6 +30,7 @@ var userRepositorySet = wire.NewSet(
 var emailDuplicateCheckerSet = wire.NewSet(services.NewEmailDuplicateService)
 
 var registerAdminUser = wire.NewSet(user.NewRegisterAdminUser)
+var editUserProfile = wire.NewSet(upusecase.NewEditProfile)
 
 var userControllerSet = wire.NewSet(usercontroller.NewUserController)
 var userProfileControllerSet = wire.NewSet(userprofile.NewUserProfileController)
@@ -43,6 +45,7 @@ func Initialize(logger *slog.Logger, db *sql.DB) *ControllerSet {
 		userRepositorySet,
 		emailDuplicateCheckerSet,
 		registerAdminUser,
+		editUserProfile,
 		userControllerSet,
 		userProfileControllerSet,
 		wire.Struct(new(ControllerSet), "*"),

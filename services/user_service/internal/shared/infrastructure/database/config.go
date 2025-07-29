@@ -3,6 +3,7 @@ package database
 import (
 	"errors"
 	"fmt"
+	"os"
 
 	"github.com/caarlos0/env/v11"
 )
@@ -15,6 +16,9 @@ type DBConfig struct {
 }
 
 func NewDBConfig() (*DBConfig, error) {
+	if os.Getenv("GO_ENV") == "dev" {
+		// TODO dotenvで.envファイルを読み込む
+	}
 	var cfg DBConfig
 	if err := env.Parse(&cfg); err != nil {
 		return nil, errors.New(fmt.Sprintf("環境変数が設定されていません: %v", err))

@@ -11,11 +11,11 @@ import (
 )
 
 type UserProfileController struct {
-	logger      slog.Logger
-	editService userprofile.EditProfile
+	logger      *slog.Logger
+	editService *userprofile.EditProfile
 }
 
-func NewUserProfileController(l slog.Logger, editService userprofile.EditProfile) *UserProfileController {
+func NewUserProfileController(l *slog.Logger, editService *userprofile.EditProfile) *UserProfileController {
 	return &UserProfileController{
 		logger:      l,
 		editService: editService,

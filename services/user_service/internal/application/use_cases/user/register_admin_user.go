@@ -13,12 +13,12 @@ import (
 )
 
 type RegisterAdminUser struct {
-	logger     slog.Logger
+	logger     *slog.Logger
 	checker    services.EmailDuplicateChecker
 	repository repositories.UserRepository
 }
 
-func NewRegisterAdminUser(l slog.Logger, c services.EmailDuplicateChecker, r repositories.UserRepository) *RegisterAdminUser {
+func NewRegisterAdminUser(l *slog.Logger, c services.EmailDuplicateChecker, r repositories.UserRepository) *RegisterAdminUser {
 	return &RegisterAdminUser{logger: l, checker: c, repository: r}
 }
 

@@ -9,12 +9,12 @@ import (
 )
 
 type UserController struct {
-	logger   slog.Logger
-	register user.RegisterAdminUser
+	logger   *slog.Logger
+	register *user.RegisterAdminUser
 	proto.UnimplementedUserServiceServer
 }
 
-func NewUserController(l slog.Logger, register user.RegisterAdminUser) *UserController {
+func NewUserController(l *slog.Logger, register *user.RegisterAdminUser) *UserController {
 	return &UserController{
 		logger:   l,
 		register: register,

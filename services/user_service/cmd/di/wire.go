@@ -6,6 +6,7 @@ package di
 import (
 	"database/sql"
 	"log/slog"
+	"user_service/internal/application/use_cases/user"
 	"user_service/internal/domain/repositories"
 	"user_service/internal/domain/services"
 	"user_service/internal/infrastructure"
@@ -25,9 +26,9 @@ var userRepositorySet = wire.NewSet(
 	wire.Bind(new(repositories.UserRepository), new(*infrastructure.UserRepositoryImpl)),
 )
 
-var emailDuplicateCheckerSet = wire.NewSet(
-	services.NewEmailDuplicateService,
-)
+var emailDuplicateCheckerSet = wire.NewSet(services.NewEmailDuplicateService)
+
+var registerAdminUser = wire.NewSet(user.NewRegisterAdminUser)
 
 var userControllerSet = wire.NewSet(usercontroller.NewUserController)
 var userProfileControllerSet = wire.NewSet(userprofile.NewUserProfileController)
@@ -41,10 +42,10 @@ func Initialize(logger *slog.Logger, db *sql.DB) *ControllerSet {
 	wire.Build(
 		userRepositorySet,
 		emailDuplicateCheckerSet,
+		registerAdminUser,
 		userControllerSet,
 		userProfileControllerSet,
 		wire.Struct(new(ControllerSet), "*"),
 	)
 	return nil
 }
-

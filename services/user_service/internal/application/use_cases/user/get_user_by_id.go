@@ -9,12 +9,13 @@ import (
 )
 
 type GetUserById struct {
-	logger     slog.Logger
+	logger     *slog.Logger
 	repository repositories.UserRepository
 }
 
-func NewGetUserById(repository repositories.UserRepository) *GetUserById {
+func NewGetUserById(l *slog.Logger, repository repositories.UserRepository) *GetUserById {
 	return &GetUserById{
+		logger:     l,
 		repository: repository,
 	}
 }

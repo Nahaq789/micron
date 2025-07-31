@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/caarlos0/env/v11"
+	"github.com/joho/godotenv"
 )
 
 type DBConfig struct {
@@ -17,7 +18,10 @@ type DBConfig struct {
 
 func NewDBConfig() (*DBConfig, error) {
 	if os.Getenv("GO_ENV") == "dev" {
-		// TODO dotenvで.envファイルを読み込む
+		err := godotenv.Load()
+		if err != nil {
+			return nil, errors.New(fmt.Sprintf(".envファイルの読み込みに失敗しました: %v", err))
+		}
 	}
 	var cfg DBConfig
 	if err := env.Parse(&cfg); err != nil {

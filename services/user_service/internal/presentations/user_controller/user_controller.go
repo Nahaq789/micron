@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"user_service/internal/application/commands"
+	"user_service/internal/application/dtos"
 	"user_service/internal/application/use_cases/user"
 	"user_service/proto"
 )
@@ -11,13 +12,15 @@ import (
 type UserController struct {
 	logger   *slog.Logger
 	register *user.RegisterAdminUser
+	get      *user.GetUserById
 	proto.UnimplementedUserServiceServer
 }
 
-func NewUserController(l *slog.Logger, register *user.RegisterAdminUser) *UserController {
+func NewUserController(l *slog.Logger, register *user.RegisterAdminUser, get *user.GetUserById) *UserController {
 	return &UserController{
 		logger:   l,
 		register: register,
+		get:      get,
 	}
 }
 
@@ -34,4 +37,9 @@ func (uc *UserController) CreateAdminUser(ctx context.Context, req *proto.Create
 
 	uc.logger.InfoContext(ctx, "管理者ユーザ作成処理を終了します。")
 	return res, nil
+}
+
+func (uc *UserController) GetUserById(ctx context.Context, id string) (*dtos.UserDto, error) {
+	uc.logger.InfoContext(ctx, "ユーザ情報取得処理を開始します。")
+	return nil, nil
 }

@@ -1,6 +1,7 @@
 package infrastructure
 
 import (
+	"context"
 	"database/sql"
 	"log/slog"
 	aggregate "user_service/internal/domain/aggregates"
@@ -24,6 +25,24 @@ func (ur UserRepositoryImpl) GetById(userId user.UserId) (*aggregate.User, error
 }
 
 func (ur UserRepositoryImpl) Register(user *aggregate.User) error {
+	ctx := context.TODO()
+	tx, err := ur.db.BeginTx(ctx, nil)
+	ur.logger.InfoContext(ctx, "トランザクションを開始します。")
+	if err != nil {
+		return err
+	}
+	if _, err := tx.Exec(
+		"insert into users (user_id, uuid_user_id, email, role_id) values(?, ?, ?, ?)", user.GetUserId().GetValue(), user.GetUuidUserId().GetValue(), user.GetEmail().GetValue(), user.GetRole().GetRoleId()); err != nil {
+		ur.logger.InfoContext(ctx, "エラーが発生したためロールバックします。")
+		tx.Rollback()
+		return err
+	}
+	if _, err := tx.Exec("iert into user_profile (user_id, user_name, bio) values(?, ?, ?)", user.GetUserId().GetValue(), user.GetUserProfile().GetUserName().GetValue(), user.GetUserProfile().GetBio().GetValue()); err != nil {
+		ur.logger.InfoContext(ctx, "エラーが発生したためロールバックします。")
+		tx.Rollback()
+		return err
+	}
+	tx.Commit()
 	return nil
 }
 

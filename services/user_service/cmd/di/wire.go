@@ -30,6 +30,7 @@ var userRepositorySet = wire.NewSet(
 var emailDuplicateCheckerSet = wire.NewSet(services.NewEmailDuplicateService)
 
 var registerAdminUser = wire.NewSet(user.NewRegisterAdminUser)
+var getByUserId = wire.NewSet(user.NewGetUserById)
 var editUserProfile = wire.NewSet(upusecase.NewEditProfile)
 
 var userControllerSet = wire.NewSet(usercontroller.NewUserController)
@@ -45,6 +46,7 @@ func Initialize(logger *slog.Logger, db *sql.DB) *ControllerSet {
 		userRepositorySet,
 		emailDuplicateCheckerSet,
 		registerAdminUser,
+		getByUserId,
 		editUserProfile,
 		userControllerSet,
 		userProfileControllerSet,

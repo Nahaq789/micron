@@ -25,7 +25,8 @@ func Initialize(logger *slog.Logger, db *sql.DB) *ControllerSet {
 	userRepositoryImpl := ProviderUserRepository(logger, db)
 	emailDuplicateChecker := services.NewEmailDuplicateService(userRepositoryImpl)
 	userRegisterAdminUser := user.NewRegisterAdminUser(logger, emailDuplicateChecker, userRepositoryImpl)
-	userController := usercontroller.NewUserController(logger, userRegisterAdminUser)
+	getUserById := user.NewGetUserById(logger, userRepositoryImpl)
+	userController := usercontroller.NewUserController(logger, userRegisterAdminUser, getUserById)
 	editProfile := userprofile.NewEditProfile(logger, userRepositoryImpl)
 	userProfileController := userprofile2.NewUserProfileController(logger, editProfile)
 	controllerSet := &ControllerSet{
@@ -49,6 +50,8 @@ var userRepositorySet = wire.NewSet(
 var emailDuplicateCheckerSet = wire.NewSet(services.NewEmailDuplicateService)
 
 var registerAdminUser = wire.NewSet(user.NewRegisterAdminUser)
+
+var getByUserId = wire.NewSet(user.NewGetUserById)
 
 var editUserProfile = wire.NewSet(userprofile.NewEditProfile)
 

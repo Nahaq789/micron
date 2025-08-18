@@ -22,7 +22,7 @@ func NewGetUserById(l *slog.Logger, repository repositories.UserRepository) *Get
 
 func (g *GetUserById) Execute(ctx context.Context, id int) (*dtos.UserDto, error) {
 	userId := user.NewUserId(id)
-	user, err := g.repository.GetById(userId)
+	user, err := g.repository.GetById(ctx, userId)
 	if err != nil {
 		g.logger.ErrorContext(ctx, "ユーザ情報の取得に失敗しました。", "error", err)
 		return nil, err

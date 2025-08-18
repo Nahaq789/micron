@@ -20,12 +20,12 @@ func NewUserRepositoryImpl(l *slog.Logger, db *sql.DB) *UserRepositoryImpl {
 	}
 }
 
-func (ur UserRepositoryImpl) GetById(userId user.UserId) (*aggregate.User, error) {
+func (ur UserRepositoryImpl) GetById(ctx context.Context, userId user.UserId) (*aggregate.User, error) {
+
 	return nil, nil
 }
 
-func (ur UserRepositoryImpl) Register(user *aggregate.User) error {
-	ctx := context.TODO()
+func (ur UserRepositoryImpl) Register(ctx context.Context, user *aggregate.User) error {
 	tx, err := ur.db.BeginTx(ctx, nil)
 	ur.logger.InfoContext(ctx, "トランザクションを開始します。")
 	if err != nil {
@@ -46,10 +46,10 @@ func (ur UserRepositoryImpl) Register(user *aggregate.User) error {
 	return nil
 }
 
-func (ur UserRepositoryImpl) Update(user *aggregate.User) error {
+func (ur UserRepositoryImpl) Update(ctx context.Context, user *aggregate.User) error {
 	return nil
 }
 
-func (ur UserRepositoryImpl) ExistsWithEmail(email *user.Email) (bool, error) {
+func (ur UserRepositoryImpl) ExistsWithEmail(ctx context.Context, email *user.Email) (bool, error) {
 	return false, nil
 }

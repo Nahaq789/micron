@@ -29,7 +29,7 @@ func (r *RegisterAdminUser) RegisterAdmin(ctx context.Context, c commands.Regist
 		return err
 	}
 
-	if exists := r.checker.CheckDuplicate(email); exists != nil {
+	if exists := r.checker.CheckDuplicate(ctx, email); exists != nil {
 		r.logger.ErrorContext(ctx, "メールアドレス重複チェックでエラーが発生しました。", "error", exists)
 		return exists
 	}
@@ -49,7 +49,7 @@ func (r *RegisterAdminUser) RegisterAdmin(ctx context.Context, c commands.Regist
 		return err
 	}
 
-	registerErr := r.repository.Register(user)
+	registerErr := r.repository.Register(ctx, user)
 	if registerErr != nil {
 		r.logger.ErrorContext(ctx, "管理者ユーザの登録に失敗しました。", "error", registerErr)
 		return err

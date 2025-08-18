@@ -1,6 +1,7 @@
 package services
 
 import (
+	"context"
 	"errors"
 	"testing"
 	aggregate "user_service/internal/domain/aggregates"
@@ -9,18 +10,20 @@ import (
 
 // モックリポジトリの実装
 type mockUserRepository struct {
-	existsWithEmailFunc func(email *user.Email) (bool, error)
+	existsWithEmailFunc func(ctx context.Context, email *user.Email) (bool, error)
 	callCount           int
 }
 
-func (m *mockUserRepository) ExistsWithEmail(email *user.Email) (bool, error) {
+func (m *mockUserRepository) ExistsWithEmail(ctx context.Context, email *user.Email) (bool, error) {
 	m.callCount++
-	return m.existsWithEmailFunc(email)
+	return m.existsWithEmailFunc(ctx, email)
 }
 
-func (m *mockUserRepository) GetById(userId user.UserId) (*aggregate.User, error) { return nil, nil }
-func (m *mockUserRepository) Register(user *aggregate.User) error                 { return nil }
-func (m *mockUserRepository) Update(user *aggregate.User) error                   { return nil }
+func (m *mockUserRepository) GetById(ctx context.Context, userId user.UserId) (*aggregate.User, error) {
+	return nil, nil
+}
+func (m *mockUserRepository) Register(ctx context.Context, user *aggregate.User) error { return nil }
+func (m *mockUserRepository) Update(ctx context.Context, user *aggregate.User) error   { return nil }
 
 func TestEmailDuplicateService_CheckDuplicate(t *testing.T) {
 	tests := []struct {
@@ -72,7 +75,7 @@ func TestEmailDuplicateService_CheckDuplicate(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			// モックリポジトリの設定
 			mockRepo := &mockUserRepository{
-				existsWithEmailFunc: func(email *user.Email) (bool, error) {
+				existsWithEmailFunc: func(ctx context.Context, email *user.Email) (bool, error) {
 					return tt.mockReturn, tt.mockError
 				},
 			}
@@ -81,7 +84,7 @@ func TestEmailDuplicateService_CheckDuplicate(t *testing.T) {
 			service := NewEmailDuplicateService(mockRepo)
 
 			// テスト実行
-			err := service.CheckDuplicate(tt.email)
+			err := service.CheckDuplicate(context.Background(), tt.email)
 
 			// 結果の検証
 			if tt.expectNoError {
@@ -130,7 +133,7 @@ func TestNewEmailDuplicateService(t *testing.T) {
 
 func TestEmailDuplicateService_CheckDuplicate_NilEmail(t *testing.T) {
 	mockRepo := &mockUserRepository{
-		existsWithEmailFunc: func(email *user.Email) (bool, error) {
+		existsWithEmailFunc: func(ctx context.Context, email *user.Email) (bool, error) {
 			if email == nil {
 				return false, errors.New("emailがnilです")
 			}
@@ -141,7 +144,7 @@ func TestEmailDuplicateService_CheckDuplicate_NilEmail(t *testing.T) {
 	service := NewEmailDuplicateService(mockRepo)
 
 	// nilのemailを渡してテスト
-	err := service.CheckDuplicate(nil)
+	err := service.CheckDuplicate(context.Background(), nil)
 
 	// エラーが発生することを期待
 	if err == nil {
@@ -170,7 +173,7 @@ func TestEmailDuplicateService_EdgeCases(t *testing.T) {
 	t.Run("同じemailで複数回呼び出した場合", func(t *testing.T) {
 		callCount := 0
 		mockRepo := &mockUserRepository{
-			existsWithEmailFunc: func(email *user.Email) (bool, error) {
+			existsWithEmailFunc: func(ctx context.Context, email *user.Email) (bool, error) {
 				callCount++
 				return false, nil
 			},
@@ -181,7 +184,7 @@ func TestEmailDuplicateService_EdgeCases(t *testing.T) {
 
 		// 同じemailで複数回呼び出し
 		for i := 0; i < 3; i++ {
-			err := service.CheckDuplicate(email)
+			err := service.CheckDuplicate(context.Background(), email)
 			if err != nil {
 				t.Errorf("呼び出し%d回目でエラーが発生しました: %v", i+1, err)
 			}

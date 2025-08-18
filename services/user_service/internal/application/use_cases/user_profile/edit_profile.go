@@ -22,7 +22,7 @@ func NewEditProfile(l *slog.Logger, r repositories.UserRepository) *EditProfile 
 
 func (e *EditProfile) EditUserProfile(ctx context.Context, command commands.EditProfileCommand) error {
 	userId := user.NewUserId(command.GetUserId())
-	user, err := e.repository.GetById(userId)
+	user, err := e.repository.GetById(ctx, userId)
 	if err != nil {
 		e.logger.ErrorContext(ctx, "ユーザ情報取得に失敗しました。", "error", err)
 		return err
@@ -34,9 +34,9 @@ func (e *EditProfile) EditUserProfile(ctx context.Context, command commands.Edit
 	}
 	bio := userprofile.NewBio(command.GetBio())
 
-	new := user.UpdateUserProfile(user, userName, bio)
+	newUser := user.UpdateUserProfile(user, userName, bio)
 
-	err = e.repository.Update(new)
+	err = e.repository.Update(ctx, newUser)
 	if err != nil {
 		e.logger.ErrorContext(ctx, "ユーザの更新に失敗しました。", "error", err)
 	}

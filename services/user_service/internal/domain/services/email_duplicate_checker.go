@@ -1,13 +1,14 @@
 package services
 
 import (
+	"context"
 	"errors"
 	"user_service/internal/domain/models/user"
 	"user_service/internal/domain/repositories"
 )
 
 type EmailDuplicateChecker interface {
-	CheckDuplicate(email *user.Email) error
+	CheckDuplicate(ctx context.Context, email *user.Email) error
 }
 
 type EmailDuplicateService struct {
@@ -18,8 +19,8 @@ func NewEmailDuplicateService(r repositories.UserRepository) EmailDuplicateCheck
 	return &EmailDuplicateService{repository: r}
 }
 
-func (s *EmailDuplicateService) CheckDuplicate(email *user.Email) error {
-	exist, err := s.repository.ExistsWithEmail(email)
+func (s *EmailDuplicateService) CheckDuplicate(ctx context.Context, email *user.Email) error {
+	exist, err := s.repository.ExistsWithEmail(ctx, email)
 	if err != nil {
 		return err
 	}

@@ -16,5 +16,6 @@ message CreateAdminUserRequest {
 }
 
 message CreateAdminUserResponse {
-        string message = 1;
+        int32 statusCode = 1;
+        string message = 2;
 }

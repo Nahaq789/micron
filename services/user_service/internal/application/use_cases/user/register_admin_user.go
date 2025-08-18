@@ -52,7 +52,7 @@ func (r *RegisterAdminUser) RegisterAdmin(ctx context.Context, c commands.Regist
 	registerErr := r.repository.Register(ctx, user)
 	if registerErr != nil {
 		r.logger.ErrorContext(ctx, "管理者ユーザの登録に失敗しました。", "error", registerErr)
-		return err
+		return registerErr
 	}
 
 	return nil

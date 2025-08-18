@@ -3,6 +3,7 @@ package usercontroller
 import (
 	"context"
 	"log/slog"
+	"net/http"
 	"user_service/internal/application/commands"
 	"user_service/internal/application/dtos"
 	"user_service/internal/application/use_cases/user"
@@ -28,11 +29,17 @@ func (uc *UserController) CreateAdminUser(ctx context.Context, req *proto.Create
 	uc.logger.InfoContext(ctx, "管理者ユーザ作成処理を開始します。")
 	command := commands.NewRegisterAdminUserCommand(req.GetEmail(), req.GetUsername(), req.GetBio(), req.GetOrganizationId())
 	if err := uc.register.RegisterAdmin(ctx, command); err != nil {
-		return nil, err
+		uc.logger.ErrorContext(ctx, "管理者ユーザ作成に失敗しました。")
+		res := &proto.CreateAdminUserResponse{
+			StatusCode: http.StatusInternalServerError,
+			Message:    "管理者ユーザ作成に失敗しました。",
+		}
+		return res, nil
 	}
 
 	res := &proto.CreateAdminUserResponse{
-		Message: "管理者ユーザの作成に成功しました。",
+		StatusCode: http.StatusCreated,
+		Message:    "管理者ユーザの作成に成功しました。",
 	}
 
 	uc.logger.InfoContext(ctx, "管理者ユーザ作成処理を終了します。")

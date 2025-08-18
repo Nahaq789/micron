@@ -91,7 +91,8 @@ func (x *CreateAdminUserRequest) GetOrganizationId() string {
 
 type CreateAdminUserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Message       string                 `protobuf:"bytes,1,opt,name=message,proto3" json:"message,omitempty"`
+	StatusCode    int32                  `protobuf:"varint,1,opt,name=statusCode,proto3" json:"statusCode,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -126,6 +127,13 @@ func (*CreateAdminUserResponse) Descriptor() ([]byte, []int) {
 	return file_proto_user_service_proto_rawDescGZIP(), []int{1}
 }
 
+func (x *CreateAdminUserResponse) GetStatusCode() int32 {
+	if x != nil {
+		return x.StatusCode
+	}
+	return 0
+}
+
 func (x *CreateAdminUserResponse) GetMessage() string {
 	if x != nil {
 		return x.Message
@@ -142,9 +150,12 @@ const file_proto_user_service_proto_rawDesc = "" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x10\n" +
 	"\x03bio\x18\x03 \x01(\tR\x03bio\x12&\n" +
-	"\x0eorganizationId\x18\x04 \x01(\tR\x0eorganizationId\"3\n" +
-	"\x17CreateAdminUserResponse\x12\x18\n" +
-	"\amessage\x18\x01 \x01(\tR\amessage2m\n" +
+	"\x0eorganizationId\x18\x04 \x01(\tR\x0eorganizationId\"S\n" +
+	"\x17CreateAdminUserResponse\x12\x1e\n" +
+	"\n" +
+	"statusCode\x18\x01 \x01(\x05R\n" +
+	"statusCode\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage2m\n" +
 	"\vUserService\x12^\n" +
 	"\x0fCreateAdminUser\x12$.user_service.CreateAdminUserRequest\x1a%.user_service.CreateAdminUserResponseB\tZ\a./protob\x06proto3"
 

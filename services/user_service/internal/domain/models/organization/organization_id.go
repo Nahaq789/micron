@@ -1,8 +1,9 @@
 package organization
 
 import (
-	"bytes"
 	"errors"
+	"fmt"
+	"strings"
 
 	"github.com/google/uuid"
 )
@@ -29,13 +30,20 @@ func NewOrganizationIdWithGenerator(generator UUIDGenerator) (OrganizationId, er
 }
 
 func FromOrganizationId(value string) (OrganizationId, error) {
-	if len(value) == 0 {
-		return OrganizationId{}, errors.New("文字列が空です。")
+	value = strings.TrimSpace(value)
+	if value == "" {
+		return OrganizationId{}, errors.New("organization ID cannot be empty")
 	}
-	b := bytes.NewBufferString(value)
-	u, err := uuid.FromBytes(b.Bytes())
+
+	u, err := uuid.Parse(value)
 	if err != nil {
-		return OrganizationId{}, errors.New("文字列からUUIDの変換に失敗しました。")
+		return OrganizationId{}, fmt.Errorf("invalid organization ID format: %w", err)
 	}
+
+	// UUID version チェック（必要に応じて）
+	if u.Version() != 4 {
+		return OrganizationId{}, errors.New("organization ID must be a valid UUID v4")
+	}
+
 	return OrganizationId{value: u}, nil
 }

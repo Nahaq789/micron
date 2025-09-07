@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"log/slog"
+	"strings"
 	aggregate "user_service/internal/domain/aggregates"
 	"user_service/internal/domain/models/user"
 )
@@ -37,7 +38,7 @@ func (ur UserRepositoryImpl) Register(ctx context.Context, user *aggregate.User)
 		tx.Rollback()
 		return err
 	}
-	if _, err := tx.Exec("iert into user_profile (user_id, user_name, bio) values(?, ?, ?)", user.GetUserId().GetValue(), user.GetUserProfile().GetUserName().GetValue(), user.GetUserProfile().GetBio().GetValue()); err != nil {
+	if _, err := tx.Exec("insert into user_profile (user_id, user_name, bio) values(?, ?, ?)", user.GetUserId().GetValue(), user.GetUserProfile().GetUserName().GetValue(), user.GetUserProfile().GetBio().GetValue()); err != nil {
 		ur.logger.InfoContext(ctx, "エラーが発生したためロールバックします。")
 		tx.Rollback()
 		return err
@@ -51,5 +52,13 @@ func (ur UserRepositoryImpl) Update(ctx context.Context, user *aggregate.User) e
 }
 
 func (ur UserRepositoryImpl) ExistsWithEmail(ctx context.Context, email *user.Email) (bool, error) {
+	ur.logger.InfoContext(ctx, "メールアドレスが重複していないか判定します。")
+	var _email string
+	if err := ur.db.QueryRow("select email from users where email = ?", email.GetValue()).Scan(&_email); err != nil {
+		return false, err
+	}
+	if len(_email) == 0 {
+		return true, nil
+	}
 	return false, nil
 }

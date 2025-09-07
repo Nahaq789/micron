@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"log/slog"
-	"strings"
 	aggregate "user_service/internal/domain/aggregates"
 	"user_service/internal/domain/models/user"
 )
